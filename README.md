@@ -12,6 +12,24 @@ SocksWebProxy is a C# project build to make http communication over the Tor netw
 * No Need for Privoxy or similar service to translate http traffic to tor
 * Easily Communicate over Tor with C#
 
+##Extensions by Ogglas
+==================================
+Start Tor automatically and renew Ip-after every request. Follow the steps below to get everything to work and also being able to control Tor via Telnet.
+
+1. Copy torrc-defaults into the directory in which tor.exe is. Default directory if you are using Tor browser is: "~\Tor Browser\Browser\TorBrowser\Data\Tor"
+2. Open a cmd prompt window
+3. chdir to the directory where tor.exe is. Default directory if you are using Tor browser is: "~\Tor Browser\Browser\TorBrowser\Tor\"
+4. Generate a password for Tor control port access. tor.exe -–hash-password “your_password_without_hyphens” | more
+5. Add your password password hash to torrc-defaults under ControlPort 9151. It should look something like this: hashedControlPassword 16:3B7DA467B1C0D550602211995AE8D9352BF942AB04110B2552324B2507. If you accept your password to be "password" you can copy the string above.
+6. You can now access Tor control via Telnet once it is started. Now the code can run, just edit the path to where your Tor files are located in the program.
+Test modifying Tor via Telnet:
+7. Start tor with the following command: tor.exe -f .\torrc-defaults
+8. Open up another cmd prompt and type: telnet localhost 9151
+9. If all goes well you should see a completely black screen. Type "autenticate “your_password_with_hyphens”" If  all goes well you should see "250 OK".
+10. Type "SIGNAL NEWNYM" and you will get a new route, ergo new IP. If  all goes well you should see "250 OK".
+11. Type "setevents circ" (circuit events) to enable console output
+12. Type "getinfo circuit-status" to see current circuits
+
 ##Tools
 ==================================
 
