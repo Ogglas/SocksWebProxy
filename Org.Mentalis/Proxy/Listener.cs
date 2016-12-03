@@ -91,7 +91,7 @@ public abstract class Listener : IDisposable{
 	}
 	///<summary>Gets the list of connected clients.</summary>
 	///<value>An instance of the ArrayList class that's used to store all the connections.</value>
-	protected ArrayList Clients {
+	private ArrayList Clients {
 		get {
 			return m_Clients;
 		}
@@ -130,13 +130,19 @@ public abstract class Listener : IDisposable{
 	///<remarks>A client will never be added twice to the list.</remarks>
 	///<param name="client">The client to add to the client list.</param>
 	protected void AddClient(Client client) {
-		if (Clients.IndexOf(client) == -1)
-			Clients.Add(client);
+        lock (Clients)
+        {
+            if (Clients.IndexOf(client) == -1)
+                Clients.Add(client);
+        }
 	}
 	///<summary>Removes the specified Client from the client list.</summary>
 	///<param name="client">The client to remove from the client list.</param>
 	protected void RemoveClient(Client client) {
-		Clients.Remove(client);
+        lock (Clients)
+        {
+            Clients.Remove(client);
+        }
 	}
 	///<summary>Returns the number of clients in the client list.</summary>
 	///<returns>The number of connected clients.</returns>
@@ -148,9 +154,12 @@ public abstract class Listener : IDisposable{
 	///<returns>The requested client.</returns>
 	///<remarks>If the specified index is invalid, the GetClientAt method returns null.</remarks>
 	public Client GetClientAt(int Index) {
-		if (Index < 0 || Index >= GetClientCount())
-			return null;
-		return (Client)Clients[Index];
+        lock (Clients)
+        {
+            if (Index < 0 || Index >= GetClientCount())
+                return null;
+            return (Client)Clients[Index];
+        }
 	}
 	///<summary>Gets a value indicating whether the Listener is currently listening or not.</summary>
 	///<value>A boolean that indicates whether the Listener is currently listening or not.</value>

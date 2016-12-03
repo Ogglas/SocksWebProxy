@@ -33,24 +33,24 @@ namespace Tests
             //System.Diagnostics.Process.Start("cmd.exe", strCmdText);
 
             //Could not start Tor any other way.
-            Process cmd = new Process();
-            cmd.StartInfo.FileName = "cmd.exe";
-            cmd.StartInfo.RedirectStandardInput = true;
-            cmd.StartInfo.RedirectStandardOutput = true;
-            cmd.StartInfo.CreateNoWindow = true;
-            cmd.StartInfo.UseShellExecute = false;
-            cmd.Start();
+            //Process cmd = new Process();
+            //cmd.StartInfo.FileName = "cmd.exe";
+            //cmd.StartInfo.RedirectStandardInput = true;
+            //cmd.StartInfo.RedirectStandardOutput = true;
+            //cmd.StartInfo.CreateNoWindow = true;
+            //cmd.StartInfo.UseShellExecute = false;
+            //cmd.Start();
 
-            //cmd.StandardInput.WriteLine("echo Oscar");
+            ////cmd.StandardInput.WriteLine("echo Oscar");
 
-            cmd.StandardInput.WriteLine(@"""C:\Users\Oscar\Desktop\Tor Browser\Browser\TorBrowser\Tor\tor.exe"" -f ""C:\Users\Oscar\Desktop\Tor Browser\Browser\TorBrowser\Tor\torrc-defaults""");
-            cmd.StandardInput.Flush();
-            cmd.StandardInput.Close();
-            cmd.WaitForExit();
+            //cmd.StandardInput.WriteLine(@"""D:\Tools\Tor\Browser\TorBrowser\Tor\tor.exe"" -f ""D:\Tools\Tor\Browser\TorBrowser\Tor\torrc-defaults""");
+            //cmd.StandardInput.Flush();
+            //cmd.StandardInput.Close();
+            //cmd.WaitForExit();
             //Console.WriteLine(cmd.StandardOutput.ReadToEnd());
 
             //Waiting for Tor to start up
-            Thread.Sleep(1000);
+            //Thread.Sleep(30000);
             RunParallel(10, "https://check.torproject.org/");
 
 

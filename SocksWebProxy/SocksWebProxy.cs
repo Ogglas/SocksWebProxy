@@ -10,7 +10,7 @@ using com.LandonKey.SocksWebProxy.Proxy;
 
 namespace com.LandonKey.SocksWebProxy
 {
-    public class SocksWebProxy:IWebProxy
+    public class SocksWebProxy:IWebProxy, IDisposable
     {
         private static object locker = new object();
         private static List<ProxyListener> listeners;
@@ -93,5 +93,28 @@ namespace com.LandonKey.SocksWebProxy
             var isSocksPortListening = System.Net.NetworkInformation.IPGlobalProperties.GetIPGlobalProperties().GetActiveTcpListeners().Any(x => x.Port == Config.SocksPort);
             return isSocksPortListening;
         }
+
+        #region IDisposable Support
+        private bool disposedValue = false; // To detect redundant calls
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    var itemsToDispose = listeners;
+                    listeners = null;
+                    itemsToDispose.ForEach(x => x.Dispose());                    
+                }
+                disposedValue = true;
+            }
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+        }
+        #endregion
     }
 }
