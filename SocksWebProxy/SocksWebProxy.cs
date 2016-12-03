@@ -10,35 +10,26 @@ using com.LandonKey.SocksWebProxy.Proxy;
 
 namespace com.LandonKey.SocksWebProxy
 {
-    public class SocksWebProxy:IWebProxy, IDisposable
+    public class SocksWebProxy:IWebProxy
     {
-        private static object locker = new object();
-        private static List<ProxyListener> listeners;
-        private static bool allowBypass;
+        private ProxyListener listener;
+        private bool allowBypass;
 
 
         private ProxyListener GetListener(ProxyConfig config, bool allowBypass = true)
         {   
-            lock(locker)
+            this.allowBypass = allowBypass;
+
+            if(listener == null)
             {
-                SocksWebProxy.allowBypass = allowBypass;
-                if (listeners == null)
-                    listeners = new List<ProxyListener>();
-
-                var listener = listeners.Where(x => x.Port == config.HttpPort).FirstOrDefault();
-
-                if(listener == null)
-                {
-                    listener = new ProxyListener(config);
-                    listener.Start();
-                    listeners.Add(listener);
-                }
-
-                if (listener.Version != config.Version) 
-                    throw new Exception("Socks Version Mismatch for Port " + config.HttpPort);
-
-                return listener;
+                listener = new ProxyListener(config);
+                listener.Start();
             }
+
+            if (listener.Version != config.Version) 
+                throw new Exception("Socks Version Mismatch for Port " + config.HttpPort);
+
+            return listener;
         }
 
         private ProxyConfig Config { get; set; }
@@ -93,28 +84,5 @@ namespace com.LandonKey.SocksWebProxy
             var isSocksPortListening = System.Net.NetworkInformation.IPGlobalProperties.GetIPGlobalProperties().GetActiveTcpListeners().Any(x => x.Port == Config.SocksPort);
             return isSocksPortListening;
         }
-
-        #region IDisposable Support
-        private bool disposedValue = false; // To detect redundant calls
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!disposedValue)
-            {
-                if (disposing)
-                {
-                    var itemsToDispose = listeners;
-                    listeners = null;
-                    itemsToDispose.ForEach(x => x.Dispose());                    
-                }
-                disposedValue = true;
-            }
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-        }
-        #endregion
     }
 }
