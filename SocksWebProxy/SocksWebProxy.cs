@@ -10,12 +10,10 @@ using com.LandonKey.SocksWebProxy.Proxy;
 
 namespace com.LandonKey.SocksWebProxy
 {
-    public class SocksWebProxy:IWebProxy
+    public class SocksWebProxy:IWebProxy, IDisposable
     {
         private ProxyListener listener;
         private bool allowBypass;
-
-
         private ProxyListener GetListener(ProxyConfig config, bool allowBypass = true)
         {   
             this.allowBypass = allowBypass;
@@ -84,5 +82,31 @@ namespace com.LandonKey.SocksWebProxy
             var isSocksPortListening = System.Net.NetworkInformation.IPGlobalProperties.GetIPGlobalProperties().GetActiveTcpListeners().Any(x => x.Port == Config.SocksPort);
             return isSocksPortListening;
         }
+
+        #region IDisposable Support
+        private bool disposedValue = false; // To detect redundant calls
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    listener?.Dispose();
+                }
+                disposedValue = true;
+            }
+        }
+
+        ~SocksWebProxy() {
+           Dispose(false);
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+        #endregion
     }
 }
