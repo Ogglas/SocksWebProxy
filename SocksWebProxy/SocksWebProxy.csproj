@@ -14,7 +14,7 @@
     <Authors>https://github.com/lloydsparkes/SocksWebProxy/graphs/contributors</Authors>
     <Version>1.4.0.0</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageId>DotNet4.SocksWebProxy</PackageId>
+    <PackageId>DotNet4.SocksProxy</PackageId>
   </PropertyGroup>
 
   <ItemGroup>
