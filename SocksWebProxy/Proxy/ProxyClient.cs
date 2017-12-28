@@ -64,6 +64,7 @@ namespace com.LandonKey.SocksWebProxy.Proxy
                 if (HttpRequestType.ToUpper().Equals("POST"))
                 {
                     int index = Query.IndexOf("\r\n\r\n");
+                    HeaderFields = ParseQuery(Query.Substring(0, index));
                     m_HttpPost = Query.Substring(index + 4);
                 }
             }
@@ -72,8 +73,8 @@ namespace com.LandonKey.SocksWebProxy.Proxy
                 DestinationSocket = new ProxySocket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                 
                 ((ProxySocket)DestinationSocket).ProxyEndPoint = new IPEndPoint(Config.SocksAddress, Config.SocksPort);
-                ((ProxySocket)DestinationSocket).ProxyUser = "username";
-                ((ProxySocket)DestinationSocket).ProxyPass = "password";
+                ((ProxySocket)DestinationSocket).ProxyUser = Config.Username;
+                ((ProxySocket)DestinationSocket).ProxyPass = Config.Password;
                 ((ProxySocket)DestinationSocket).ProxyType = Config.ProxyType;
                 
                 if (HeaderFields.ContainsKey("Proxy-Connection") && HeaderFields["Proxy-Connection"].ToLower().Equals("keep-alive"))
